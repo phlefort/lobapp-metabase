@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: lobapp-metabase
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the SQLite database for analysis
+      # Using relative path to access the sibling directory
+      - ../lobapp-transformation/reconciliation.db:/data/reconciliation.db
+      
+      # Persist Metabase application data (users, dashboards, etc.)
+      - ./metabase-data:/metabase-data
+    environment:
+      - MB_DB_FILE=/metabase-data/metabase.db
+    restart: unless-stopped
